@@ -4,8 +4,9 @@ cd -P "$(dirname "$0")/.."
 TMUX="" \
 	tmux new-session -e PATH="$PATH" '
   echo ""                               &&
-  echo "http://localhost:8000/api/docs" &&
+  echo "http://localhost:8000"          &&
   echo "http://localhost:8000/admin"    &&
+  echo "http://localhost:8000/api/docs" &&
   read
 ' \; split-window -f -p 80 '
   function ctrl_c() {
