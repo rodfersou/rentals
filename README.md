@@ -1,20 +1,20 @@
 # Rentals
 This project follows many good practices:
-* To manage scripts follow the: https://github.com/github/scripts-to-rule-them-all
-* Many of the good practices follow what is in Cosmic Python book https://www.cosmicpython.com/book/preface.html
-* Using Django Ninja to generate API with docs
+* To manage scripts follow the `scripts to rule them all`: https://github.com/github/scripts-to-rule-them-all
+* Many of the good practices follow what is in `Cosmic Python` book https://www.cosmicpython.com/book/preface.html
+* Using `Django Ninja` to generate API with docs https://django-ninja.dev/
 
 ## Development
-Local development use Nix: https://determinate.systems/posts/determinate-nix-installer/
+Local development use `Nix`: https://determinate.systems/posts/determinate-nix-installer/
 
-After install Nix, add also direnv and nix-direnv:
+After install `Nix`, add also `direnv` and `nix-direnv`:
 
 ```bash
 nix profile install nixpkgs#direnv
 nix profile install nixpkgs#nix-direnv
 ```
 
-First time accessing the folder we need to allow it to run direnv and nix:
+First time accessing the folder we need to allow it to run `direnv` and `Nix`:
 
 ```bash
 direnv allow
