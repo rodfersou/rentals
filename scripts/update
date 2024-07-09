@@ -4,3 +4,10 @@ cd "$(dirname "$0")/.."
 python manage.py migrate --noinput
 python manage.py loaddata --app rentals rentals.json
 python manage.py loaddata --app rentals reservations.json
+
+DJANGO_SUPERUSER_PASSWORD=admin \
+	python manage.py createsuperuser \
+	--username admin \
+	--email admin@admin.com \
+	--skip-checks \
+	--noinput

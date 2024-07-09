@@ -8,6 +8,7 @@ ENV PATH="/nix/var/nix/profiles/default/bin:$PATH" \
 
 COPY . /app
 WORKDIR /app
+EXPOSE 8000
 
 RUN <<DOCKER_BEFORE   bash                                                          \
  && <<CONFIG_NIX_CONF sed -r 's/^ {4}//;/^$/d;/^#/d' | cat > ~/.config/nix/nix.conf \
@@ -45,5 +46,4 @@ CONFIG_NIX_CONF
     apt-get autoremove -y
     rm -rf /var/lib/apt/lists/*
 DOCKER_AFTER
-EXPOSE 8000
-CMD ["/root/.nix-profile/bin/nix develop --command /app/scripts/start"]
+CMD ["/app/scripts/start-prod"]

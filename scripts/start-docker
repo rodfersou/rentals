@@ -3,8 +3,8 @@ cd -P "$(dirname "$0")/.."
 
 docker run \
 	--rm -it \
+	-v .:/app \
 	--mount source=nix,target=/nix \
 	--mount source=cache,target=/cache \
-	-p 8000:8000 \
-	ghcr.io/rodfersou/rentals-api:latest \
-	nix develop --command /app/scripts/start
+	-p 127.0.0.1:8000:8000 \
+	ghcr.io/rodfersou/rentals-api:latest

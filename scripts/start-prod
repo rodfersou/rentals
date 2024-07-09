@@ -1,0 +1,19 @@
+#!/usr/bin/env -S nix develop --command bash
+cd -P "$(dirname "$0")/.."
+
+TMUX="" \
+	tmux new-session -e PATH="$PATH" '
+  echo ""                               &&
+  echo "http://localhost:8000"          &&
+  echo "http://localhost:8000/admin"    &&
+  echo "http://localhost:8000/api/docs" &&
+  read
+' \; split-window -f -p 80 '
+  function ctrl_c() {
+    tmux kill-session
+  }
+  trap ctrl_c INT
+  ./scripts/update || true
+  gunicorn -w 4 app.wsgi:application --bind 0.0.0.0:8000 || true
+  read
+'
