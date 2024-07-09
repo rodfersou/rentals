@@ -2,3 +2,5 @@
 cd "$(dirname "$0")/.."
 ./scripts/bootstrap
 python manage.py migrate --noinput
+python manage.py loaddata --app rentals rentals.json
+python manage.py loaddata --app rentals reservations.json

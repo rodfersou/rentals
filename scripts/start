@@ -13,7 +13,7 @@ TMUX="" \
     tmux kill-session
   }
   trap ctrl_c INT
-  ./scripts/update-prod || true
+  ./scripts/update || true
   python manage.py runserver || true
   read
 '
