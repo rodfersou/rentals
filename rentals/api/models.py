@@ -23,12 +23,12 @@ class APIReservationResponse(APIReservationRequest):
 
 
 class UpdateAPIRentalRequest(Entity):
-    name: Optional[str] = pd.Field(max_lengh=100, default=None)
+    name: Optional[str] = pd.Field(max_length=100, default=None)
     reservations: list[UpdateAPIReservationRequest] = []
 
 
 class APIRentalRequest(Entity):
-    name: str = pd.Field(max_lengh=100)
+    name: str = pd.Field(max_length=100)
     reservations: list[APIReservationRequest] = []
 
 

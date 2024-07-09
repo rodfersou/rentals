@@ -1,10 +1,39 @@
+import abc
+from datetime import date
+
 from django.db import transaction
 
 from rentals.entities.entities import Rental, Reservation
 from rentals.repository import orm
 
 
-class Repository:
+class AbstractRepository(abc.ABC):
+    @abc.abstractmethod
+    def save(self, rental: Rental) -> Rental:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def list(self) -> list[Rental]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get(self, rental_id: int) -> Rental:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def update(self, rental_id: int, fields: dict) -> Rental:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def delete(
+        self,
+        rental_id: int | None = None,
+        reservation_id: int | None = None,
+    ):
+        raise NotImplementedError
+
+
+class Repository(AbstractRepository):
     def _from_db(
         self, rental_db: orm.Rental, reservations_db: list[orm.Reservation]
     ) -> Rental:
@@ -69,8 +98,13 @@ class Repository:
             rental_db.save()
             reservations_db = []
             for reserv_fields in fields["reservations"]:
-                if not (reserv_id := reserv_fields.get("id")):
-                    continue
+                reserv_id = reserv_fields.get("id")
+                if not reserv_id:
+                    reserv_db = orm.Reservation(checkin=date.today())
+                else:
+                    reserv_db = orm.Reservation.objects.get(
+                        id=reserv_id, rental=rental_db
+                    )
                 reserv_db = orm.Reservation.objects.get(id=reserv_id, rental=rental_db)
                 for key, value in reserv_fields.items():
                     setattr(reserv_db, key, value)
@@ -78,7 +112,11 @@ class Repository:
                 reservations_db.append(reserv_db)
             return self._from_db(rental_db, reservations_db)
 
-    def delete(self, rental_id: int | None = None, reservation_id: int | None = None):
+    def delete(
+        self,
+        rental_id: int | None = None,
+        reservation_id: int | None = None,
+    ):
         if rental_id is None and reservation_id is None:
             return
         with transaction.atomic():

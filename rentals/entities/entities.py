@@ -15,5 +15,5 @@ class Reservation(Entity):
 
 class Rental(Entity):
     id: Optional[int] = None
-    name: str = pd.Field(max_lengh=100)
+    name: str = pd.Field(max_length=100)
     reservations: list[Reservation] = []
