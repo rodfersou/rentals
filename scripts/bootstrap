@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+cd -P "$(dirname "$0")/.."
+poetry install --no-root
+export PATH="$(poetry env info -p)/bin:$PATH"

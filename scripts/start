@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+cd -P "$(dirname "$0")/.."
+
+TMUX="" \
+	tmux new-session -e PATH="$PATH" '
+  echo ""                               &&
+  echo "http://localhost:8000/api/docs" &&
+  echo "http://localhost:8000/admin"    &&
+  read
+' \; split-window -f -p 80 '
+  function ctrl_c() {
+    tmux kill-session
+  }
+  trap ctrl_c INT
+  ./scripts/update-prod || true
+  python manage.py runserver || true
+  read
+'
