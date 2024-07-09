@@ -1,0 +1,7 @@
+#!/bin/bash
+cd -P "$(dirname "$0")/.."
+
+echo $PAT | docker login ghcr.io -u rodfersou --password-stdin
+docker buildx build --progress plain --platform linux/amd64 -t rentals-api .
+docker tag rentals-api:latest ghcr.io/rodfersou/rentals-api:latest
+docker push ghcr.io/rodfersou/rentals-api:latest
