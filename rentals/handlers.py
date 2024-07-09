@@ -17,3 +17,26 @@ def create_rental(payload: APIRentalRequest) -> Rental:
         reservations=reservations,
     )
     return repo.save(rental)
+
+
+def list_rentals() -> list[Rental]:
+    repo = Repository()
+    return repo.list()
+
+
+def get_rental(rental_id: int) -> Rental:
+    repo = Repository()
+    return repo.get(rental_id)
+
+
+def update_rental(rental_id: int, payload: APIRentalRequest) -> Rental:
+    repo = Repository()
+    return repo.update(
+        rental_id,
+        payload.dict(exclude_none=True),
+    )
+
+
+def delete_rental(rental_id: int):
+    repo = Repository()
+    return repo.delete(rental_id=rental_id)

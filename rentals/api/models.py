@@ -1,29 +1,30 @@
 from datetime import date
-from typing import Optional, Self
+from typing import Optional
 
 import pydantic as pd
 
 from rentals.entities.base import Entity
-from rentals.entities.entities import Rental, Reservation
+
+
+class UpdateAPIReservationRequest(Entity):
+    id: int
+    checkin: Optional[date] = None
+    checkout: Optional[date] = None
 
 
 class APIReservationRequest(Entity):
-    previous: Optional[int] = None
     checkin: date
     checkout: Optional[date] = None
 
 
 class APIReservationResponse(APIReservationRequest):
     id: int
+    previous: Optional[int] = None
 
-    @classmethod
-    def from_entity(cls, reservation: Reservation) -> Self:
-        return cls(
-            id=reservation.id,
-            previous=reservation.previous,
-            checkin=reservation.checkin,
-            checkout=reservation.checkout,
-        )
+
+class UpdateAPIRentalRequest(Entity):
+    name: Optional[str] = pd.Field(max_lengh=100, default=None)
+    reservations: list[UpdateAPIReservationRequest] = []
 
 
 class APIRentalRequest(Entity):
@@ -34,14 +35,3 @@ class APIRentalRequest(Entity):
 class APIRentalResponse(APIRentalRequest):
     id: int
     reservations: list[APIReservationResponse] = []
-
-    @classmethod
-    def from_entity(cls, rental: Rental) -> Self:
-        return cls(
-            id=rental.id,
-            name=rental.name,
-            reservations=[
-                APIReservationResponse.from_entity(reservation)
-                for reservation in rental.reservations
-            ],
-        )

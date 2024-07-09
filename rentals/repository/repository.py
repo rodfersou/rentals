@@ -57,13 +57,13 @@ class Repository:
         return rentals
 
     def get(self, rental_id: int) -> Rental:
-        rental_db = orm.Rental.get(id=rental_id)
+        rental_db = orm.Rental.objects.get(id=rental_id)
         reservations_db = orm.Reservation.objects.filter(rental__id=rental_db.id)
         return self._from_db(rental_db, reservations_db)
 
     def update(self, rental_id: int, fields: dict) -> Rental:
         with transaction.atomic():
-            rental_db = orm.Rental.get(id=rental_id)
+            rental_db = orm.Rental.objects.get(id=rental_id)
             if name := fields.get("name"):
                 rental_db.name = name
             rental_db.save()
@@ -71,7 +71,7 @@ class Repository:
             for reserv_fields in fields["reservations"]:
                 if not (reserv_id := reserv_fields.get("id")):
                     continue
-                reserv_db = orm.Reservation.get(id=reserv_id)
+                reserv_db = orm.Reservation.objects.get(id=reserv_id, rental=rental_db)
                 for key, value in reserv_fields.items():
                     setattr(reserv_db, key, value)
                 reserv_db.save()
@@ -83,10 +83,10 @@ class Repository:
             return
         with transaction.atomic():
             if rental_id is not None:
-                rental_db = orm.Rental.get(id=rental_id)
+                rental_db = orm.Rental.objects.get(id=rental_id)
                 rental_db.delete()
                 return
             if reservation_id is not None:
-                reserv_db = orm.Reservation.get(id=reservation_id)
+                reserv_db = orm.Reservation.objects.get(id=reservation_id)
                 reserv_db.delete()
                 return
