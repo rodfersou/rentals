@@ -14,6 +14,12 @@ nix profile install nixpkgs#direnv
 nix profile install nixpkgs#nix-direnv
 ```
 
+Then add nix-direnv to `$HOME/.direnvrc`:
+
+```bash
+source $HOME/.nix-profile/share/nix-direnv/direnvrc
+```
+
 First time accessing the folder we need to allow it to run `direnv` and `Nix`:
 
 ```bash
